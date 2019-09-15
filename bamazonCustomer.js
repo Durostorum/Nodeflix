@@ -24,8 +24,8 @@ var connection = mysql.createConnection({
                
       }
       console.log("-----------------------------------");
-      
-      askQ()
+      console.log(res.length)
+      askQ(res.length)
       
     });
   }
@@ -33,7 +33,7 @@ var connection = mysql.createConnection({
     
     
     
-function askQ(){
+function askQ(lon){
     inquirer
     .prompt([
       {
@@ -50,7 +50,7 @@ function askQ(){
     .then(answers => {
         var orderedId = answers.item_id;
         var orderedQuantity = answers.quantity;
-        if (orderedId <= 0 || orderedId >10 ) {
+        if ( orderedId >lon  || orderedId <= 0) {
           console.log('Please choose from our current stock inventory!')
           buyAgain()
         } else {
@@ -68,11 +68,13 @@ function availability(orderedId, orderedQuantity){
       } else {
 
       availStock = (res[0].stock_quantity);
+      
       productPrice = res[0].price;
       newStock = parseFloat(availStock - orderedQuantity);
       
       var totalPrice = (productPrice * orderedQuantity)
       if (newStock < 0 || availStock == 0){
+        console.log(res)
         console.log("------------")
           console.log("I'm sorry. We are not able to proceed an order for that many items")
           console.log("------------")
